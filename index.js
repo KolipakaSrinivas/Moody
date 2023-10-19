@@ -1,7 +1,14 @@
 /* === Imports === */
 import { initializeApp } from "firebase/app";
-import { getFirestore, getDocs } from "firebase/firestore";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  getFirestore,
+  onSnapshot,
+  query,
+  where 
+} from "firebase/firestore";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -9,7 +16,7 @@ import {
   signOut,
   onAuthStateChanged,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithPopup
   // updateProfile
 } from "firebase/auth";
 
@@ -60,7 +67,6 @@ const userGreetingEl = document.getElementById("user-greeting");
 const moodEmojiEls = document.getElementsByClassName("mood-emoji-btn");
 const textareaEl = document.getElementById("post-input");
 const postButtonEl = document.getElementById("post-btn");
-const fetchPostsButtonEl = document.getElementById("fetch-posts-btn");
 const postsEl = document.getElementById("posts");
 /* == UI - Event Listeners == */
 
@@ -74,11 +80,13 @@ for (let moodEmojiEl of moodEmojiEls) {
 }
 // updateProfileButtonEl.addEventListener("click", authUpdateProfile);
 postButtonEl.addEventListener("click", postButtonPressed);
-fetchPostsButtonEl.addEventListener("click", fetchOnceAndRenderPostsFromDB);
 
 /* === State === */
 
 let moodState = 0;
+
+/* === Global Constants === */
+const collectionName = "posts";
 
 /* === Main Code === */
 
@@ -88,6 +96,7 @@ onAuthStateChanged(auth, (user) => {
     showProfilePicture(userProfilePictureEl, user);
     clearAuthFields();
     showUserGreeting(userGreetingEl, user);
+    fetchInRealtimeAndRenderPostsFromDB(user);
   } else {
     showLoggedOutView();
   }
@@ -161,7 +170,7 @@ function authSignOut() {
 
 async function addPostToDB(postBody, user) {
   try {
-    const docRef = await addDoc(collection(db, "posts"), {
+    const docRef = await addDoc(collection(db, collectionName), {
       body: postBody,
       uid: user.uid,
       createdAt: serverTimestamp(),
@@ -173,17 +182,32 @@ async function addPostToDB(postBody, user) {
   }
 }
 
-async function fetchOnceAndRenderPostsFromDB() {
+/* async function fetchOnceAndRenderPostsFromDB() {
   const querySnapshot = await getDocs(collection(db, "posts"));
   clearAll(postsEl)
   querySnapshot.forEach((doc) => {
     renderPost(postsEl, doc.data());
   });
+
+
+function fetchInRealtimeAndRenderPostsFromDB() {
+  onSnapshot(collection(db, collectionName), (querySnapshot) => {
+      
+  })
+} => "Retrieve data using 'getDocs' and incorporate an 'addEventListener' for enhanced functionality."
+*/
+
+function fetchInRealtimeAndRenderPostsFromDB(user) {
+  const postsRef = collection(db, collectionName)
+  const q = query(postsRef, where("uid", "==", user.uid))
+
+  onSnapshot(q, (querySnapshot) => {
+    clearAll(postsEl);
+    querySnapshot.forEach((doc) => {
+      renderPost(postsEl, doc.data());
+    });
+  });
 }
-
-
-
-
 
 /* == Functions - UI Functions == */
 function renderPost(postsEl, postData) {
@@ -197,15 +221,12 @@ function renderPost(postsEl, postData) {
             ${replaceNewlinesWithBrTags(postData.body)}
             </p>
         </div>
-    `
+    `;
 }
 
 function replaceNewlinesWithBrTags(inputString) {
-  return inputString.replace(/\n/g, "<br>")
+  return inputString.replace(/\n/g, "<br>");
 }
-
-
-
 
 function postButtonPressed() {
   const postBody = textareaEl.value;
@@ -218,7 +239,7 @@ function postButtonPressed() {
 }
 
 function clearAll(element) {
-  element.innerHTML = ""
+  element.innerHTML = "";
 }
 
 function showLoggedOutView() {
@@ -269,6 +290,9 @@ function showUserGreeting(element, user) {
 }
 
 function displayDate(firebaseDate) {
+  if (!firebaseDate) {
+    return "Date processing";
+  }
   const date = firebaseDate.toDate();
 
   const day = date.getDate();

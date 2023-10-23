@@ -1,31 +1,31 @@
 :root {
-  --primary-color: #ffde00;
-  --primary-light-color: #ffe769;
-  --secondary-color: #ffe4ba;
-  --secondary-light-color: #fff6e8;
-  --post-color: #62eea8;
-  --delete-color: #ff9f9f;
-  --light-color: #fffefc;
-  --grey-color: #747e79;
+  --primary-color: #FFDE00;
+  --primary-light-color: #FFE769;
+  --secondary-color: #FFE4BA;
+  --secondary-light-color: #FFF6E8;
+  --post-color: #62EEA8;
+  --delete-color: #FF9F9F;
+  --light-color: #FFFEFC;
+  --grey-color: #747E79;
   --dark-color: #000000;
+  --white-color: #FFFEFC;
 
-  --primary-font: "Cabin", sans-serif;
-  --seconday-font: "Calistoga", sans-serif;
-
+  --primary-font: 'Cabin', sans-serif;
+  --seconday-font: 'Calistoga', sans-serif;
+  
   --border-width: 3px;
   --element-border-radius: 5px;
-
+  
   --button-height: 5px;
-
+  
   --small-button-height: 2px;
-
+  
   --element-padding: 0.8em;
-
+  
   --maximum-width: 320px;
 }
 
-html,
-body {
+html, body {
   margin: 0;
   padding: 0;
   font-size: 16px;
@@ -80,6 +80,7 @@ section {
   border-radius: 100%;
   border: var(--border-width) solid var(--dark-color);
 }
+
 .user-section h2 {
   font-size: 1.2em;
 }
@@ -133,8 +134,36 @@ section {
   display: flex;
   flex-direction: column;
   gap: 1em;
-  margin-bottom: 1.8em;
+margin-bottom: 1.8em;
 }
+
+/* == Posts Section - Filters == */
+
+.filters-and-posts-section {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
+.filters-section {
+  display: flex;
+  gap: 0.4em;
+}
+
+.filter-btn {
+  color: var(--dark-color);
+  font-size: 0.9em;
+  padding: 0.3em;
+  background-color: transparent;
+}
+
+.selected-filter {
+  color: var(--white-color);
+  background-color: var(--dark-color);
+}
+
+/* == Posts Section - Posts == */
 
 .post {
   display: flex;
@@ -144,6 +173,8 @@ section {
   border-radius: var(--element-border-radius);
   gap: 0.4em;
 }
+
+/* = Posts Section - Posts - Header = */
 
 .post .header {
   display: flex;
@@ -160,13 +191,42 @@ section {
   height: 2em;
 }
 
+/* = Posts Section - Posts - Body = */
+
 .post p {
   font-size: 0.9em;
   line-height: 1.3em;
 }
 
+/* = Posts Section - Posts - Footer = */
 
-/* === NAV === */
+.post .footer {
+  display: flex;
+  align-self: flex-start;
+  gap: 0.4em;
+}
+
+.post .footer button {
+  font-size: 0.9em;
+  padding: 0.2em 0.8em;
+  box-shadow: 0px var(--small-button-height) 0px 0px var(--dark-color);
+  position: relative;
+}
+
+.post .footer button:hover {
+  top: var(--small-button-height);
+  box-shadow: none;
+}
+
+.post .footer .edit-color {
+  background-color: var(--post-color);
+}
+
+.post .footer .delete-color {
+  background-color: var(--delete-color);
+}
+
+/* === Nav === */
 
 nav {
   margin: 0.6em 0;
@@ -197,8 +257,7 @@ nav {
 
 /* === Common for elements === */
 
- input,
- input, button, textarea {
+input, button, textarea {
   font-family: inherit;
   padding: var(--element-padding);
   border-radius: var(--element-border-radius);
@@ -296,17 +355,18 @@ button:hover {
   align-items: center;
   gap: 0.5em;
   border: 0;
-  box-shadow: 3px 3px 3px 1px rgba(0, 0, 0, 0.25);
+  box-shadow: 3px 3px 3px 1px rgba(0, 0, 0, .25);
 }
 
 .provider-btn:hover {
   transition: all 0.2s ease;
-  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, .25);
 }
 
 .google-btn-logo {
   width: 1.375em;
 }
+
 .icon-btn {
   background: none;
   border: none;

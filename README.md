@@ -19,3 +19,47 @@ The Frontend Developer Career Path aims to teach you everything you need to beco
 - [Become a Scrimba Pro member](https://scrimba.com/pricing)
 
 Happy Coding!
+
+
+Custom functions in Security Rules
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function userIsAuthorOfPost() {
+      return request.auth.uid == resource.data.uid;
+    }
+    
+    match /{document=**} {
+	    allow write: if isSignedIn();
+      allow read: if isSignedIn() && userIsAuthorOfPost();
+    }
+  }
+}
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function userIsAuthorOfPost() {
+      return request.auth.uid == resource.data.uid;
+    }
+    
+    match /{document=**} {
+	    allow create: if isSignedIn();
+      allow read: if isSignedIn() && userIsAuthorOfPost();
+      allow update: if isSignedIn() && userIsAuthorOfPost();
+      allow delete: if isSignedIn() && userIsAuthorOfPost();
+    }
+  }
+}

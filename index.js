@@ -204,7 +204,8 @@ async function updatePostInDB(docId, newBody) {
 }
 
 async function deletePostFromDB(docId) {
-  await deleteDoc(doc(db, collectionName, "docId"));
+  console.log(docId)
+  await deleteDoc(doc(db, collectionName, docId));
 }
 
 /* async function fetchOnceAndRenderPostsFromDB() {
@@ -418,7 +419,7 @@ function postButtonPressed() {
   const postBody = textareaEl.value;
   const user = auth.currentUser;
 
-  if (postBody) {
+  if (postBody && moodState) {
     addPostToDB(postBody, user);
     clearInputField(textareaEl);
     resetAllMoodElements(moodEmojiEls);
